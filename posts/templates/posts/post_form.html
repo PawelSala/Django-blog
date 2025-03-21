@@ -1,0 +1,32 @@
+<!-- posts/templates/posts/post_form.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{% if form.instance.pk %}Edytuj Post{% else %}Dodaj Nowy Post{% endif %}{% endblock %}
+
+{% block content %}
+    <h2>{% if form.instance.pk %}Edytuj Post{% else %}Dodaj Nowy Post{% endif %}</h2>
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ form.title.label_tag }}
+            {{ form.title }}
+            {% if form.title.errors %}
+                <div class="text-danger">
+                    {{ form.title.errors }}
+                </div>
+            {% endif %}
+        </div>
+        <div class="mb-3">
+            {{ form.content.label_tag }}
+            {{ form.content }}
+            {% if form.content.errors %}
+                <div class="text-danger">
+                    {{ form.content.errors }}
+                </div>
+            {% endif %}
+        </div>
+        <button type="submit" class="btn btn-primary">{% if form.instance.pk %}Zapisz Zmiany{% else %}Dodaj Post{% endif %}</button>
+    </form>
+    <a href="{% url 'post_list' %}" class="btn btn-secondary mt-3">Powrót do listy postów</a>
+{% endblock %}

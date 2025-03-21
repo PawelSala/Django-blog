@@ -1,0 +1,22 @@
+<!-- posts/templates/posts/post_list.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Lista Postów{% endblock %}
+
+{% block content %}
+    <h1>Lista Postów</h1>
+    <ul class="list-group">
+        {% for post in posts %}
+            <li class="list-group-item">
+                <a href="{% url 'post_detail' post.pk %}">{{ post.title }}</a> 
+                by 
+                <a href="{% url 'user_profile' post.author.username %}">{{ post.author.username }}</a> 
+                - {{ post.created_at|date:"d-m-Y H:i" }}
+            </li>
+        {% empty %}
+            <li class="list-group-item">Brak postów.</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'post_create' %}" class="btn btn-primary mt-3">Dodaj Nowy Post</a>
+{% endblock %}

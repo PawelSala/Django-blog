@@ -1,0 +1,49 @@
+<!-- posts/templates/posts/post_detail.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ post.title }}</h1>
+    <p>{{ post.content }}</p>
+    <p>
+        Autor: 
+        <a href="{% url 'user_profile' post.author.username %}" class="text-decoration-none">{{ post.author.username }}</a>
+        | Data utworzenia: {{ post.created_at|date:"d-m-Y H:i" }}
+    </p>
+    
+    {% if user.is_authenticated and user == post.author %}
+        <a href="{% url 'post_edit' post.pk %}" class="btn btn-warning">Edytuj</a>
+        <a href="{% url 'post_delete' post.pk %}" class="btn btn-danger">Usuń</a>
+    {% endif %}
+    
+    <hr>
+    <h2>Komentarze</h2>
+    <ul class="list-group">
+        {% for comment in comments %}
+            <li class="list-group-item">
+                <strong>
+                    <a href="{% url 'user_profile' comment.author.username %}" class="text-decoration-none">{{ comment.author.username }}</a>
+
+                </strong>: {{ comment.text }}
+            </li>
+        {% empty %}
+            <li class="list-group-item">Brak komentarzy.</li>
+        {% endfor %}
+    </ul>
+    
+    <hr>
+    {% if user.is_authenticated %}
+        <h3>Dodaj Komentarz</h3>
+        <form method="post">
+            {% csrf_token %}
+            {{ comment_form.as_p }}
+            <button type="submit" class="btn btn-primary">Dodaj Komentarz</button>
+        </form>
+    {% else %}
+        <p><a href="{% url 'login' %}">Zaloguj się</a>, aby dodać komentarz.</p>
+    {% endif %}
+    
+    <a href="{% url 'post_list' %}" class="btn btn-secondary mt-3">Powrót do listy postów</a>
+{% endblock %}

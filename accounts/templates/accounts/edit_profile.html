@@ -1,0 +1,47 @@
+<!-- accounts/templates/accounts/edit_profile.html -->
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Edytuj Profil - {{ user.username }}{% endblock %}
+
+{% block content %}
+    <h2>Edytuj Profil</h2>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="mb-3">
+            <h4>Dane użytkownika</h4>
+            <div class="mb-3">
+                {{ user_form.username.label_tag }}
+                {{ user_form.username }}
+                {% if user_form.username.errors %}
+                    <div class="text-danger">{{ user_form.username.errors }}</div>
+                {% endif %}
+            </div>
+            <div class="mb-3">
+                {{ user_form.email.label_tag }}
+                {{ user_form.email }}
+                {% if user_form.email.errors %}
+                    <div class="text-danger">{{ user_form.email.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="mb-3">
+            <h4>Profil</h4>
+            <div class="mb-3">
+                {{ profile_form.bio.label_tag }}
+                {{ profile_form.bio }}
+                {% if profile_form.bio.errors %}
+                    <div class="text-danger">{{ profile_form.bio.errors }}</div>
+                {% endif %}
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Zapisz Zmiany</button>
+    </form>
+{% endblock %}
